@@ -1,46 +1,61 @@
 package com;
 
-import java.time.LocalDate;
-
 public class EmployeeBean {
 	
-	private final int id;
-	private final String name, surname, gender;
-	private final LocalDate birthDate, joinDate;
-	
-	public EmployeeBean(int id, String name, String surname, String gender, LocalDate birthDate, LocalDate joinDate) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.gender = gender;
-		this.birthDate = birthDate;
-		this.joinDate = joinDate;
+	private String id, name, surname, gender, birthDate, joinDate;
+
+	/* if an argument constructor is included, a default constructor MUST ALSO be included for this
+	* class to be JSON serializable
+	*/
+	public String getId() {
+		return id;
 	}
 
-
-	public int getId() {
-		return id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getSurname() {
 		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	public String getGender() {
 		return gender;
 	}
 
-	public LocalDate getBirthDate() {
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getBirthDate() {
 		return birthDate;
 	}
 
-	public LocalDate getJoinDate() {
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public String getJoinDate() {
 		return joinDate;
 	}
+
+	public void setJoinDate(String joinDate) {
+		this.joinDate = joinDate;
+	}
+	
+	
+	
 }
 

@@ -3,14 +3,14 @@ package com.communication;
 
 import java.util.ArrayList;
 
-import com.EmployeeBean;
+import com.Employee;
 
 public class EmployeesResponse extends Response {
 	
 	private final int count;
-	private final ArrayList<EmployeeBean> list;
+	private final ArrayList<Employee> list;
 	
-	public EmployeesResponse(int count, ArrayList<EmployeeBean> list, boolean success) {
+	public EmployeesResponse(int count, ArrayList<Employee> list, boolean success) {
 		super(success);
 		this.count = count;
 		this.list = list;
@@ -26,7 +26,7 @@ public class EmployeesResponse extends Response {
 		return count;
 	}
 
-	public ArrayList<EmployeeBean> getList() {
+	public ArrayList<Employee> getList() {
 		return list;
 	}
 	

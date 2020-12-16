@@ -5,13 +5,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import com.Employee;
 import com.EmployeeBean;
 import com.communication.*;
 
 public class DBOperations {
 
 	public static EmployeesResponse getEmployees(int page, int items) throws Exception {
-		ArrayList<EmployeeBean> list = new ArrayList<EmployeeBean>();
+		ArrayList<Employee> list = new ArrayList<Employee>();
 
 		if (accessDatabase() == null)
 			return new EmployeesResponse(new CustomError("Could not connect to database"));
@@ -41,23 +42,25 @@ public class DBOperations {
 		return new CountResponse(count, true);
 	}
 
-	public static AddEmployeeResponse addEmployee(String id, String name, String surname, String gender,
-			String birthDate, String joinDate) throws Exception {
+	public static AddEmployeeResponse addEmployee(EmployeeBean bean) throws Exception {
 		if (accessDatabase() == null)
 			return new AddEmployeeResponse(new CustomError("Could not connect to database"));
 		DateTimeFormatter receivedFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		EmployeeBean employee = new EmployeeBean(Integer.parseInt(id), name, surname, gender,
-				LocalDate.parse(birthDate, receivedFormat), LocalDate.parse(joinDate, receivedFormat));
+		
+		Employee employee = new Employee(Integer.parseInt(bean.getId()), bean.getName(),
+				bean.getSurname(), bean.getGender(), LocalDate.parse(bean.getBirthDate(), receivedFormat),
+				LocalDate.parse(bean.getJoinDate(), receivedFormat));
+		
 		String result = accessDatabase().addEmployee(employee);
 
 		if (result == "duplicate") {
-			System.out.println("Employee " + id + " already exists in database");
+			System.out.println("Employee " + employee.getId() + " already exists in database");
 			return new AddEmployeeResponse(new CustomError("Employee already exists in database"));
 		}
-		return new AddEmployeeResponse(true, name + " " + surname);
+		return new AddEmployeeResponse(true, employee.getName() + " " + employee.getSurname());
 	}
 
-	private static EmployeeBean parseEmployee(ResultSet result) throws SQLException {
+	private static Employee parseEmployee(ResultSet result) throws SQLException {
 
 		int id = result.getInt("id");
 		String name = result.getString("name");
@@ -67,7 +70,7 @@ public class DBOperations {
 		Date joinDate = result.getDate("joinDate");
 		
 
-		return new EmployeeBean(id, name, surname, gender, birthDate.toLocalDate(), joinDate.toLocalDate());
+		return new Employee(id, name, surname, gender, birthDate.toLocalDate(), joinDate.toLocalDate());
 
 	}
 

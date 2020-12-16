@@ -2,7 +2,7 @@ package com.db;
 
 import java.sql.*;
 
-import com.EmployeeBean;
+import com.Employee;
 
 public class Database {
 	
@@ -61,7 +61,7 @@ public class Database {
 		return result;
 	}
 	
-	public String addEmployee(EmployeeBean employee) {
+	public String addEmployee(Employee employee) {
 		String result = null;
 		
 		String query = "INSERT INTO employee_data (`id`,`name`,`surname`,`joinDate`,`gender`,`birthDate` ) VALUES('"+employee.getId()+"', '"+employee.getName()+"','"+employee.getSurname()+"','"+employee.getJoinDate().toString()+"','"+employee.getGender()+"','"+employee.getBirthDate().toString()+"');";
