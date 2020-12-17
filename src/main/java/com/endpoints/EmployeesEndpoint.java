@@ -7,11 +7,11 @@ import java.util.Date;
 import com.communication.EmployeesResponse;
 import com.communication.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
@@ -25,9 +25,15 @@ public class EmployeesEndpoint {
 	
 	
 	@GET @Produces(MediaType.APPLICATION_JSON)
-    public Response getEmployees(@Context HttpHeaders httpHeaders, @QueryParam("page") String page, @QueryParam("items") String items) throws Exception {
+    public Response getEmployees(@Context HttpServletRequest request, @QueryParam("page") String page, @QueryParam("items") String items) throws Exception {
         
-		String ip =  httpHeaders.getHeaderString("x-forwarded-for");
+		
+		String ip = null;
+		try {
+			ip =  request.getRemoteAddr();
+		} catch (Exception e) {
+			
+		}
 		
 		System.out.println("GET EMPLOYEES request" + (ip == null ? "" : " from " + ip) + " at " + new Date());
 		

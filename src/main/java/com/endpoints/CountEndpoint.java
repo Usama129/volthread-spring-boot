@@ -2,11 +2,12 @@ package com.endpoints;
 
 import java.sql.SQLException;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -23,10 +24,15 @@ public class CountEndpoint {
 	
 	
 	@GET @Produces(MediaType.APPLICATION_JSON)
-    public Response getEmployeeCount(@Context HttpHeaders httpHeaders) throws Exception {
+    public Response getEmployeeCount(@Context HttpServletRequest request) throws Exception {
         
 		
-		String ip =  httpHeaders.getHeaderString("x-forwarded-for");
+		String ip = null;
+		try {
+			ip =  request.getRemoteAddr();
+		} catch (Exception e) {
+			
+		}
 		System.out.println("GET COUNT --- request" + (ip == null ? "" : " from " + ip) + " at " + new Date());
 		
 		CountResponse response = null;

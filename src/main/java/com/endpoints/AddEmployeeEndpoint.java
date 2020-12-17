@@ -4,12 +4,12 @@ import java.sql.SQLException;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -27,10 +27,15 @@ import com.db.DBOperations;
 public class AddEmployeeEndpoint {
 
 	@POST @Produces(MediaType.APPLICATION_JSON) @Consumes(MediaType.APPLICATION_JSON)
-	public Response addEmployee(@Context HttpHeaders httpHeaders, EmployeeBean employee) throws Exception {
+	public Response addEmployee(@Context HttpServletRequest request, EmployeeBean employee) throws Exception {
 		
 		
-		 String ip = httpHeaders.getHeaderString("x-forwarded-for");
+		String ip = null;
+		try {
+			ip =  request.getRemoteAddr();
+		} catch (Exception e) {
+			
+		}
 		 System.out.println("ADD EMPLOYEE- request" + (ip == null ? "" : " from " +
 				 ip) + " at " + new Date());
 		 
