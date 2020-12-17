@@ -36,8 +36,7 @@ public class AddEmployeeEndpoint {
 		} catch (Exception e) {
 			
 		}
-		 System.out.println("ADD EMPLOYEE- request" + (ip == null ? "" : " from " +
-				 ip) + " at " + new Date());
+		 System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "ADD EMPLOYEE- request at " + new Date());
 		 
 		AddEmployeeResponse response = null;
 		
@@ -71,13 +70,13 @@ public class AddEmployeeEndpoint {
 		}
 		
 		if (response.isSuccess()) {
-			System.out.println("Added Employee " + response.getFullName() + (ip == null ? "" : " for " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Added Employee " + response.getFullName());
 			return Response.status(200).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} else if (response.getError().getMessage().contains("already exists")){
-			System.out.println("Rejected duplicate employee " + (ip == null ? "" : " for " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Rejected duplicate employee " + employee.getName() + employee.getSurname());
 			return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} else {
-			System.out.println("Failed to add employee " + (ip == null ? "" : " for " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Failed to add employee.\n" + response.getError().getMessage());
 			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
 	}

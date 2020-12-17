@@ -35,7 +35,7 @@ public class EmployeesEndpoint {
 			
 		}
 		
-		System.out.println("GET EMPLOYEES request" + (ip == null ? "" : " from " + ip) + " at " + new Date());
+		System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "GET EMPLOYEES request at " + new Date());
 		
 		EmployeesResponse response = null;
 		
@@ -60,10 +60,10 @@ public class EmployeesEndpoint {
 		}
 		
 		if (response.isSuccess()) {
-			System.out.println("Returned " + response.getCount() + " items for page " + page + (ip == null ? "" : " to " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Returned " + response.getCount() + " items for page " + page );
 			return Response.status(200).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} else {
-			System.out.println("Failed to fetch employees" + (ip == null ? "" : " for " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Failed to fetch employees");
 			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
     }

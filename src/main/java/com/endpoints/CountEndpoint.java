@@ -33,7 +33,7 @@ public class CountEndpoint {
 		} catch (Exception e) {
 			
 		}
-		System.out.println("GET COUNT --- request" + (ip == null ? "" : " from " + ip) + " at " + new Date());
+		System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "GET COUNT --- request at " + new Date());
 		
 		CountResponse response = null;
 		
@@ -50,10 +50,10 @@ public class CountEndpoint {
 		}
 		
 		if (response.isSuccess()) {
-			System.out.println("Returned count " + response.getEmployeeCount() + (ip == null ? "" : " to " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Returned count " + response.getEmployeeCount());
 			return Response.status(200).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} else {
-			System.out.println("Failed to get count" + (ip == null ? "" : " for " + ip));
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Failed to get count");
 			return Response.status(200).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
 	}

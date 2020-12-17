@@ -61,7 +61,7 @@ public class Database {
 		return result;
 	}
 	
-	public String addEmployee(Employee employee) {
+	public String addEmployee(Employee employee) throws Exception {
 		String result = null;
 		
 		String query = "INSERT INTO employee_data (`id`,`name`,`surname`,`joinDate`,`gender`,`birthDate` ) VALUES('"+employee.getId()+"', '"+employee.getName()+"','"+employee.getSurname()+"','"+employee.getJoinDate().toString()+"','"+employee.getGender()+"','"+employee.getBirthDate().toString()+"');";
@@ -73,6 +73,8 @@ public class Database {
 			System.out.println(e.getMessage());
 			if (e.getMessage().contains("Duplicate"))
 				result = "duplicate";
+			else 
+				throw e;
 		}
 		
 		return result;
