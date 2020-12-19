@@ -12,7 +12,7 @@ public class EmployeeBean {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this.id = id.trim();
 	}
 
 	public String getName() {
@@ -20,7 +20,7 @@ public class EmployeeBean {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public String getSurname() {
@@ -28,7 +28,7 @@ public class EmployeeBean {
 	}
 
 	public void setSurname(String surname) {
-		this.surname = surname;
+		this.surname = surname.trim();
 	}
 
 	public String getGender() {
