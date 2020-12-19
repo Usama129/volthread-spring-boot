@@ -11,12 +11,12 @@ public class EmployeesResponse extends Response {
 	private final ArrayList<Employee> list;
 	
 	public EmployeesResponse(int count, ArrayList<Employee> list, boolean success) {
-		super(success);
+		super(success, 0); // fetch always changes 0 rows
 		this.count = count;
 		this.list = list;
 	}
 	
-	public EmployeesResponse(CustomError error) {
+	public EmployeesResponse(VolException error) {
 		super(error);
 		this.list = null;
 		this.count = -1;

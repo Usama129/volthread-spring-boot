@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
 import com.communication.CountResponse;
-import com.communication.CustomError;
+import com.communication.VolException;
 import com.db.DBOperations;
 
 @Service
@@ -40,12 +40,14 @@ public class CountEndpoint {
 		try {
 			response = DBOperations.getCount();
 		} catch (SQLException e) {
+			response = new CountResponse(new VolException("SQL Error:" + e.getMessage()));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server could not talk to the database")).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 			
 		} catch (Exception e) {
+			response = new CountResponse(new VolException(e.getMessage()));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server Error: " + e.getMessage())).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 			
 		}
 		

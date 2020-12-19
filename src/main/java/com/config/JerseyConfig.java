@@ -12,5 +12,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(AddEmployeeEndpoint.class);
 		register(EmployeesEndpoint.class);
 		register(CountEndpoint.class);
+		register(DeleteEndpoint.class);
 	}
 }

@@ -6,11 +6,11 @@ public class CountResponse extends Response {
 	private final int employeeCount;
 
 	public CountResponse(int employeeCount, boolean success) {
-		super(success);
+		super(success, 0); // count op always changes 0 rows
 		this.employeeCount = employeeCount;
 	}
 	
-	public CountResponse(CustomError error) {
+	public CountResponse(VolException error) {
 		super(error);
 		this.employeeCount = -1;
 	}

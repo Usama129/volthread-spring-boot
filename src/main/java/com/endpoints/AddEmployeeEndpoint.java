@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.EmployeeBean;
 import com.communication.AddEmployeeResponse;
-import com.communication.CustomError;
+import com.communication.VolException;
 import com.db.DBOperations;
 
 @Service
@@ -44,39 +44,43 @@ public class AddEmployeeEndpoint {
 		 if (employee.getId() == null || employee.getName() == null || 
 				 employee.getSurname() == null || employee.getGender() == null ||
 				 employee.getBirthDate() == null || employee.getJoinDate() == null ) {
-			 
-					 System.out.println("REJECTED - Bad Params"); return
-					 Response.status(400).entity("REJECTED - Bad Params").type(MediaType.
-					 APPLICATION_JSON).build(); 
+			 		
+			 		response = new AddEmployeeResponse(new VolException("REJECTED - Bad Params"));
+					 System.out.println("REJECTED - Bad Params"); 
+					 return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build(); 
 		 }
 		 
 		
 		try {
 			response = DBOperations.addEmployee(employee);
 		} catch (SQLException e) {
+			response = new AddEmployeeResponse(new VolException("Server could not talk to the database"));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server could not talk to the database")).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} catch (DateTimeParseException e) {
+			response = new AddEmployeeResponse(new VolException("Server: invalid date format(s)"));
 			System.out.println(e.getMessage());
-			return Response.status(400).entity(new CustomError("Server: Invalid date format(s)")).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build();
 		
 		} catch (NumberFormatException e) {
+			response = new AddEmployeeResponse(new VolException("Server: ID must be numeric"));
 			System.out.println(e.getMessage());
-			return Response.status(400).entity(new CustomError("Server: ID must be numeric")).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build();
 		
 		} catch (Exception e) {
+			response = new AddEmployeeResponse(new VolException(e.getMessage()));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server Error: " + e.getMessage())).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
 		
 		if (response.isSuccess()) {
 			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Added Employee " + response.getFullName());
 			return Response.status(200).entity(response).type(MediaType.APPLICATION_JSON).build();
-		} else if (response.getError().getMessage().contains("already exists")){
-			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Rejected duplicate employee " + employee.getName() + employee.getSurname());
+		} else if (response.getError().contains("already exists")){
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Rejected duplicate employee " + employee.getName() + " " + employee.getSurname());
 			return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build();
 		} else {
-			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Failed to add employee.\n" + response.getError().getMessage());
+			System.out.println((ip == null ? "" : "Client: " + ip + " --- ") + "Failed to add employee.\n" + response.getError());
 			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
 	}

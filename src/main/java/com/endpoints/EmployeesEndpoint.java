@@ -4,7 +4,6 @@ package com.endpoints;
 import java.sql.SQLException;
 import java.util.Date;
 
-import com.communication.EmployeesResponse;
 import com.communication.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +40,8 @@ public class EmployeesEndpoint {
 		
 		if (page == null || items == null || page.isEmpty() || items.isEmpty()) {
 			System.out.println("REJECTED - Bad Params");
-			return Response.status(400).entity("REJECTED - Bad Params").type(MediaType.APPLICATION_JSON).build();
+			response = new EmployeesResponse(new VolException("REJECTED - Bad Params"));
+			return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build();
 		}
 		
 		try {
@@ -49,13 +49,14 @@ public class EmployeesEndpoint {
 			int itemsPerPage = Integer.parseInt(items.trim());
 			response = DBOperations.getEmployees(pageNo, itemsPerPage);
 		} catch(SQLException e) {
-			
+			response = new EmployeesResponse(new VolException("SQL Error: Server could not talk to the database"));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server could not talk to the database")).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 			
 		} catch (Exception e) {
+			response = new EmployeesResponse(new VolException(e.getMessage()));
 			System.out.println(e.getMessage());
-			return Response.status(500).entity(new CustomError("Server Error: " + e.getMessage())).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(500).entity(response).type(MediaType.APPLICATION_JSON).build();
 			
 		}
 		

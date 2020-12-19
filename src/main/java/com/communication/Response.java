@@ -3,26 +3,33 @@ package com.communication;
 public class Response {
 	
 	private final boolean success;
-	private final CustomError error;
+	private final String error;
+	private final int rowsChanged;
 	
-	public Response(boolean success ) {
+	public Response(boolean success, int rowsChanged) {
 		super();
 		this.success = success;
 		this.error = null;
+		this.rowsChanged = rowsChanged;
 	}
 	
-	public Response(CustomError error ) {
+	public Response(VolException error ) {
 		super();
 		this.success = false;
-		this.error = error;
+		this.error = error.getMessage();
+		this.rowsChanged = error.getRowsChanged();
 	}
 
 	public boolean isSuccess() {
 		return success;
 	}
 
-	public CustomError getError() {
+	public String getError() {
 		return error;
+	}
+
+	public int getRowsChanged() {
+		return rowsChanged;
 	}
 	
 	

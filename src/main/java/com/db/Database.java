@@ -1,8 +1,10 @@
 package com.db;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import com.Employee;
+import com.communication.VolException;
 
 public class Database {
 	
@@ -80,6 +82,33 @@ public class Database {
 		return result;
 	}
 	
+	public int deleteEmployees(ArrayList<String> ids) throws Exception {
+		String result = null;
+		
+		int rowsChanged = 0;
+		
+		String query = "";
+		
+		try {
+			statement = dbConnection.createStatement();
+			for (String id : ids) {
+				if (!isInteger(id))
+					throw new VolException("Expected numeric IDs, bad data: " + id, rowsChanged);
+				query = "DELETE FROM `employee_data` WHERE (`id` = '"+id+"');";
+				result = statement.executeUpdate(query) + "";
+				if (isInteger(result))
+					rowsChanged += Integer.parseInt(result);
+				else
+					throw new VolException(result, rowsChanged);
+			}
+		} catch (Exception e) {
+			System.out.println("Encountered error after deleting " + rowsChanged + " rows"); 
+			throw new VolException(e, rowsChanged);
+		}
+		
+		return rowsChanged;
+	}
+	
 	public void closeStatement() {
 		try {
 			if (!statement.isClosed())
@@ -87,6 +116,22 @@ public class Database {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public static boolean isInteger(String s) {
+	    return isInteger(s,10);
+	}
+
+	public static boolean isInteger(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
 	}
 
 }

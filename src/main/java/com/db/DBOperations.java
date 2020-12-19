@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.Employee;
 import com.EmployeeBean;
+import com.IDListBean;
 import com.communication.*;
 
 public class DBOperations {
@@ -15,7 +16,7 @@ public class DBOperations {
 		ArrayList<Employee> list = new ArrayList<Employee>();
 
 		if (accessDatabase() == null)
-			return new EmployeesResponse(new CustomError("Could not connect to database"));
+			return new EmployeesResponse(new VolException("Could not connect to database"));
 
 		ResultSet result = accessDatabase().fetchEmployeeRecords(page, items);
 
@@ -30,7 +31,7 @@ public class DBOperations {
 
 	public static CountResponse getCount() throws Exception {
 		if (accessDatabase() == null)
-			return new CountResponse(new CustomError("Could not connect to database"));
+			return new CountResponse(new VolException("Could not connect to database"));
 		ResultSet result = accessDatabase().fetchEmployeeCount();
 
 		int count = -1;
@@ -44,7 +45,7 @@ public class DBOperations {
 
 	public static AddEmployeeResponse addEmployee(EmployeeBean bean) throws Exception {
 		if (accessDatabase() == null)
-			return new AddEmployeeResponse(new CustomError("Could not connect to database"));
+			return new AddEmployeeResponse(new VolException("Could not connect to database"));
 		DateTimeFormatter receivedFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
 		Employee employee = new Employee(Integer.parseInt(bean.getId()), bean.getName(),
@@ -55,9 +56,18 @@ public class DBOperations {
 
 		if (result == "duplicate") {
 			System.out.println("Employee " + employee.getId() + " already exists in database");
-			return new AddEmployeeResponse(new CustomError("Employee already exists in database"));
+			return new AddEmployeeResponse(new VolException("Employee already exists in database"));
 		}
 		return new AddEmployeeResponse(true, employee.getName() + " " + employee.getSurname());
+	}
+	
+	public static DeleteEmployeesResponse deleteEmployees(IDListBean bean) throws Exception {
+		if (accessDatabase() == null)
+			return new DeleteEmployeesResponse(new VolException("Could not connect to database"));
+		
+		int deletedRows = accessDatabase().deleteEmployees(bean.getIdList());
+		
+		return new DeleteEmployeesResponse(true, deletedRows);
 	}
 
 	private static Employee parseEmployee(ResultSet result) throws SQLException {
