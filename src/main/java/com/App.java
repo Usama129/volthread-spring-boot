@@ -21,7 +21,7 @@ public class App {
 		
 		Duration syncPeriod = Duration.ofMinutes(20);
 		CronScheduler cron = CronScheduler.create(syncPeriod);
-		cron.scheduleAtFixedRateSkippingToLatest(0, 1, TimeUnit.MINUTES, runTimeMillis -> {
+		cron.scheduleAtFixedRateSkippingToLatest(0, 20, TimeUnit.MINUTES, runTimeMillis -> {
 			Pinger.pingClient(); // ping client every 20 minutes to keep it from idling
 		});
 	}
