@@ -13,11 +13,9 @@ import com.communication.*;
 public class DBOperations {
 
 	public static EmployeesResponse getEmployees(int page, int items) throws Exception {
-		ArrayList<Employee> list = new ArrayList<Employee>();
-
 		if (accessDatabase() == null)
 			return new EmployeesResponse(new VolException("Could not connect to database"));
-
+		ArrayList<Employee> list = new ArrayList<Employee>();
 		ResultSet result = accessDatabase().fetchEmployeeRecords(page, items);
 
 		while (result.next()) {
@@ -29,6 +27,20 @@ public class DBOperations {
 		return new EmployeesResponse(list.size(), list, true);
 	}
 
+	public static EmployeesResponse getEmployees(String term, int items) throws Exception {
+		if (accessDatabase() == null)
+			return new EmployeesResponse(new VolException("Could not connect to database"));
+		ArrayList<Employee> list = new ArrayList<Employee>();
+		ResultSet result = accessDatabase().fetchEmployeeRecords(term, items);
+		while (result.next()) {
+			list.add(parseEmployee(result));
+		}
+
+		accessDatabase().closeStatement();
+
+		return new EmployeesResponse(list.size(), list, true);
+	}
+	
 	public static CountResponse getCount() throws Exception {
 		if (accessDatabase() == null)
 			return new CountResponse(new VolException("Could not connect to database"));

@@ -10,6 +10,7 @@ public class JerseyConfig extends ResourceConfig {
 	public JerseyConfig() {
 		register(ResponseFilter.class); // to allow CORS
 		register(AddEmployeeEndpoint.class);
+		register(SearchEndpoint.class);
 		register(EmployeesEndpoint.class);
 		register(CountEndpoint.class);
 		register(DeleteEndpoint.class);
