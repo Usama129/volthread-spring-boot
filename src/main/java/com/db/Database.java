@@ -7,18 +7,25 @@ import com.Employee;
 import com.communication.VolException;
 
 public class Database {
-
+	
 	private static Database dbInstance = null;
 	Connection dbConnection = null;
 	Statement statement = null;
+	
+	private Database() throws Exception {
+			String driver = DBInfo.getInstance().getDriver();
+			String dbHost = DBInfo.getInstance().getHost();
+			String dbPort = DBInfo.getInstance().getPort();
+			String dbSchema = DBInfo.getInstance().getSchema();
+			String dbUser = DBInfo.getInstance().getUser();
+			String dbPass = DBInfo.getInstance().getPass();
+		 	Class.forName(driver);
+		 	dbConnection = 
+		 			DriverManager.getConnection("jdbc:mysql://"+dbHost+":"+dbPort+'/'
+		 					+ dbSchema, dbUser, dbPass);	
+	 	}
 
-	private Database() throws SQLException, ClassNotFoundException {
-		Class.forName("com.mysql.jdbc.Driver");
-		dbConnection = DriverManager.getConnection("jdbc:mysql://35.197.247.91:3306/employee_schema", "root",
-				"asdf1234");
-	}
-
-	public static Database getInstance() throws SQLException, ClassNotFoundException {
+	public static Database getInstance() throws Exception {
 		if (dbInstance == null)
 			dbInstance = new Database();
 		return dbInstance;
