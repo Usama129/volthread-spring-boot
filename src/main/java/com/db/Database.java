@@ -156,6 +156,11 @@ public class Database {
 
 		return rowsChanged;
 	}
+	
+	public void pingDB() throws SQLException {
+		statement = dbConnection.createStatement();
+		statement.executeQuery("select 1");
+	}
 
 	public void closeStatement() {
 		try {
