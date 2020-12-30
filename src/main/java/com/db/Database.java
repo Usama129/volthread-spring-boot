@@ -38,9 +38,9 @@ public class Database {
 		String query;
 
 		if (page == 0 || itemsPerPage == 0)
-			query = "select * from employee_data"; // fetch all records
+			query = "select * from employees"; // fetch all records
 		else
-			query = "select * from employee_data limit " + offset + ", " + itemsPerPage;
+			query = "select * from employees limit " + offset + ", " + itemsPerPage;
 
 		ResultSet result = null;
 
@@ -62,9 +62,9 @@ public class Database {
 		String query;
 		
 		if (items == 0) {
-			query = "select * from employee_data where surname LIKE '" + surname + "%' order by surname";
+			query = "select * from employees where surname LIKE '" + surname + "%' order by surname";
 		} else {
-			query = "select * from employee_data where surname LIKE '" + surname + "%' order by surname limit 0, " + items;
+			query = "select * from employees where surname LIKE '" + surname + "%' order by surname limit 0, " + items;
 		}
 		
 		ResultSet result = null;
@@ -85,7 +85,7 @@ public class Database {
 
 		try {
 			statement = dbConnection.createStatement();
-			result = statement.executeQuery("select count(id) as employeeCount from employee_data");
+			result = statement.executeQuery("select count(id) as employeeCount from employees");
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -99,7 +99,7 @@ public class Database {
 
 		try {
 			statement = dbConnection.createStatement();
-			result = statement.executeQuery("select count(id) as employeeCount from employee_data where surname LIKE '" + surname + "%'");
+			result = statement.executeQuery("select count(id) as employeeCount from employees where surname LIKE '" + surname + "%'");
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -111,7 +111,7 @@ public class Database {
 	public String addEmployee(Employee employee) throws Exception {
 		String result = null;
 
-		String query = "INSERT INTO employee_data (`id`,`name`,`surname`,`joinDate`,`gender`,`birthDate` ) VALUES('"
+		String query = "INSERT INTO employees (`id`,`name`,`surname`,`joinDate`,`gender`,`birthDate` ) VALUES('"
 				+ employee.getId() + "', '" + employee.getName() + "','" + employee.getSurname() + "','"
 				+ employee.getJoinDate().toString() + "','" + employee.getGender() + "','"
 				+ employee.getBirthDate().toString() + "');";
@@ -142,7 +142,7 @@ public class Database {
 			for (String id : ids) {
 				if (!isInteger(id))
 					throw new VolException("Expected numeric IDs, bad data: " + id, rowsChanged);
-				query = "DELETE FROM `employee_data` WHERE (`id` = '" + id + "');";
+				query = "DELETE FROM `employees` WHERE (`id` = '" + id + "');";
 				result = statement.executeUpdate(query) + "";
 				if (isInteger(result))
 					rowsChanged += Integer.parseInt(result);
