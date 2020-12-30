@@ -50,6 +50,12 @@ public class AddEmployeeEndpoint {
 					 return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build(); 
 		 }
 		 
+		 
+		 if (!(employee.getGender().equalsIgnoreCase("m") || employee.getGender().equalsIgnoreCase("f"))) {
+			 response = new AddEmployeeResponse(new VolException("Server: Gender can be M or F"));
+			 System.out.println("REJECTED - bad string for gender: " + employee.getGender()); 
+			 return Response.status(400).entity(response).type(MediaType.APPLICATION_JSON).build(); 
+		 }
 		
 		try {
 			response = DBOperations.addEmployee(employee);
