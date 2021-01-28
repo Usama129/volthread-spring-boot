@@ -30,6 +30,8 @@ public class App {
 			db.pingDB(); // ping DB every 50 seconds since ClearDB idles after a minute of inactivity
 			System.out.println("Pinged DB");
 		});
+		
+		EmailSender.notifyStarted();
 	}
 
 }
